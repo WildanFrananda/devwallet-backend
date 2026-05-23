@@ -1,5 +1,6 @@
 import { Test, TestingModule } from "@nestjs/testing"
 import { FastifyAdapter, NestFastifyApplication } from "@nestjs/platform-fastify"
+import { WsAdapter } from "@nestjs/platform-ws"
 import { AppModule } from "../src/app.module"
 
 describe("Health (e2e)", () => {
@@ -12,6 +13,7 @@ describe("Health (e2e)", () => {
 
     app = moduleFixture.createNestApplication<NestFastifyApplication>(new FastifyAdapter())
     app.setGlobalPrefix("api/v1")
+    app.useWebSocketAdapter(new WsAdapter(app))
     await app.init()
     await app.getHttpAdapter().getInstance().ready()
   })
