@@ -34,4 +34,5 @@ jobs:
       - run: bun run typecheck
       - run: bun run migration:run
       - run: bun run test
+      - run: bun run test:e2e
       - run: bun run build
