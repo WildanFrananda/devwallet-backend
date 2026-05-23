@@ -1,0 +1,28 @@
+name: CI
+on: [push, pull_request]
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: devwallet
+          POSTGRES_PASSWORD: devwallet_dev
+          POSTGRES_DB: devwallet_test
+        ports: ['5432:5432']
+        options: >-
+          --health-cmd "pg_isready -U devwallet"
+          --health-interval 5s --health-timeout 5s --health-retries 5
+      redis:
+        image: redis:7-alpine
+        ports: ['6379:6379']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+      - run: bun install --frozen-lockfile
+      - run: bun run lint
+      - run: bun run typecheck
+      - run: bun run migration:run
+      - run: bun test
+      - run: bun run build

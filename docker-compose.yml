@@ -1,0 +1,108 @@
+name: devwallet
+
+services:
+  # ===== PostgreSQL 16 ============================================
+  postgres:
+    image: postgres:16-alpine
+    container_name: devwallet-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: devwallet
+      POSTGRES_PASSWORD: devwallet_dev
+      POSTGRES_DB: devwallet
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./scripts/init-db.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U devwallet"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  # ===== Redis 7 (cache + BullMQ) =================================
+  redis:
+    image: redis:7-alpine
+    container_name: devwallet-redis
+    restart: unless-stopped
+    command: redis-server --appendonly yes --maxmemory 256mb --maxmemory-policy allkeys-lru
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  # ===== Anvil (Foundry local EVM node) ===========================
+  anvil:
+    image: ghcr.io/foundry-rs/foundry:latest
+    container_name: devwallet-anvil
+    restart: unless-stopped
+    entrypoint: anvil
+    command: >
+      --host 0.0.0.0
+      --port 8545
+      --chain-id 31337
+      --accounts 10
+      --balance 10000
+      --block-time 2
+    ports:
+      - "8545:8545"
+    profiles: ["chain"]
+
+  # ===== Solana test validator ====================================
+  solana:
+    image: solanalabs/solana:stable
+    container_name: devwallet-solana
+    restart: unless-stopped
+    command: >
+      solana-test-validator
+      --rpc-port 8899
+      --bind-address 0.0.0.0
+      --ledger /solana-ledger
+      --reset
+    ports:
+      - "8899:8899"   # JSON-RPC
+      - "8900:8900"   # WebSocket
+    volumes:
+      - solana_ledger:/solana-ledger
+    profiles: ["chain"]
+
+  # ===== Adminer (PostgreSQL UI) ==================================
+  adminer:
+    image: adminer:4-standalone
+    container_name: devwallet-adminer
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    environment:
+      ADMINER_DEFAULT_SERVER: postgres
+      ADMINER_DESIGN: dracula
+    depends_on:
+      postgres:
+        condition: service_healthy
+    profiles: ["ui"]
+
+  # ===== RedisInsight (Redis UI) ==================================
+  redisinsight:
+    image: redis/redisinsight:latest
+    container_name: devwallet-redisinsight
+    restart: unless-stopped
+    ports:
+      - "5540:5540"
+    volumes:
+      - redisinsight_data:/data
+    depends_on:
+      redis:
+        condition: service_healthy
+    profiles: ["ui"]
+
+volumes:
+  postgres_data:
+  redis_data:
+  solana_ledger:
+  redisinsight_data:
