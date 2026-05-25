@@ -1,5 +1,7 @@
-export const QueueNames = {
+const QueueNames = {
   Faucet: "faucet"
 } as const
 
-export type QueueName = (typeof QueueNames)[keyof typeof QueueNames]
+type QueueName = (typeof QueueNames)[keyof typeof QueueNames]
+
+export { QueueNames, type QueueName }

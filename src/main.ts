@@ -4,7 +4,7 @@ import { FastifyAdapter, NestFastifyApplication } from "@nestjs/platform-fastify
 import { ValidationPipe } from "@nestjs/common"
 import { WsAdapter } from "@nestjs/platform-ws"
 import HttpExceptionFilter from "./shared/filters/http-exception.filter"
-import { LoggingInterceptor } from "./shared/interceptors/logging.interceptor"
+import LoggingInterceptor from "./shared/interceptors/logging.interceptor"
 
 async function bootstrap() {
   const app = await NestFactory.create<NestFastifyApplication>(

@@ -8,7 +8,7 @@ import {
 } from "@nestjs/common"
 import { FastifyReply, FastifyRequest } from "fastify"
 
-interface ErrorResponseBody {
+type ErrorResponseBody = {
   statusCode: number
   error: string
   message: string | string[]
@@ -20,7 +20,7 @@ interface ErrorResponseBody {
 class HttpExceptionFilter implements ExceptionFilter {
   private readonly logger = new Logger(HttpExceptionFilter.name)
 
-  catch(exception: unknown, host: ArgumentsHost): void {
+  public catch(exception: unknown, host: ArgumentsHost): void {
     const ctx = host.switchToHttp()
     const response = ctx.getResponse<FastifyReply>()
     const request = ctx.getRequest<FastifyRequest>()

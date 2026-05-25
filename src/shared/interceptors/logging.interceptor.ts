@@ -3,10 +3,10 @@ import { FastifyReply, FastifyRequest } from "fastify"
 import { Observable, tap } from "rxjs"
 
 @Injectable()
-export class LoggingInterceptor implements NestInterceptor {
+class LoggingInterceptor implements NestInterceptor {
   private readonly logger = new Logger("HTTP")
 
-  intercept(context: ExecutionContext, next: CallHandler): Observable<unknown> {
+  public intercept(context: ExecutionContext, next: CallHandler): Observable<unknown> {
     const ctx = context.switchToHttp()
     const req = ctx.getRequest<FastifyRequest>()
     const res = ctx.getResponse<FastifyReply>()
@@ -25,3 +25,5 @@ export class LoggingInterceptor implements NestInterceptor {
     this.logger.log(`${req.method} ${req.url} -> ${res.statusCode} ${durMs.toFixed(1)}ms`)
   }
 }
+
+export default LoggingInterceptor
