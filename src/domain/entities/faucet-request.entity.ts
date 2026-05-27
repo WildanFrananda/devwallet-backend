@@ -9,7 +9,7 @@ import {
 } from "typeorm"
 import DeviceEntity from "./device.entity"
 
-export type FaucetRequestStatus = "pending" | "processing" | "completed" | "failed"
+type FaucetRequestStatus = "pending" | "processing" | "completed" | "failed"
 
 @Entity("faucet_requests")
 @Index("idx_faucet_requests_device", ["device_id"])
@@ -52,3 +52,4 @@ class FaucetRequestEntity {
 }
 
 export default FaucetRequestEntity
+export { type FaucetRequestStatus }

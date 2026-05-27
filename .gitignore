@@ -20,3 +20,10 @@ coverage/
 
 # typeorm
 ormlogs.log
+
+# Firebase / APNs secrets — never commit
+*firebase*admin*.json
+*adminsdk*.json
+GoogleService-Info.plist
+google-services.json
+*.p8

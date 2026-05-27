@@ -68,3 +68,4 @@ class HttpExceptionFilter implements ExceptionFilter {
 }
 
 export default HttpExceptionFilter
+export { type ErrorResponseBody }

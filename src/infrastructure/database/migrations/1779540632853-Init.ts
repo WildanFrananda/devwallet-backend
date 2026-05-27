@@ -1,6 +1,6 @@
 import { MigrationInterface, QueryRunner } from "typeorm"
 
-export class Init1779540632853 implements MigrationInterface {
+class Init1779540632853 implements MigrationInterface {
   name = "Init1779540632853"
 
   public async up(queryRunner: QueryRunner): Promise<void> {
@@ -84,3 +84,5 @@ export class Init1779540632853 implements MigrationInterface {
     await queryRunner.query(`DROP TABLE IF EXISTS "devices"`)
   }
 }
+
+export { Init1779540632853 }
