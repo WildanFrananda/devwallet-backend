@@ -11,6 +11,7 @@ type UpdateFaucetRequestInput = {
   tx_hash?: string | null
   amount?: string | null
   error_msg?: string | null
+  manual_url?: string | null
   completed_at?: Date | null
 }
 

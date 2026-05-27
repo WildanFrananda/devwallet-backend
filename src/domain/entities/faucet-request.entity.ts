@@ -44,6 +44,9 @@ class FaucetRequestEntity {
   @Column({ type: "text", nullable: true })
   error_msg: string | null
 
+  @Column({ type: "text", nullable: true })
+  manual_url: string | null
+
   @CreateDateColumn({ type: "timestamptz" })
   created_at: Date
 

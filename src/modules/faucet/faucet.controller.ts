@@ -35,6 +35,7 @@ class FaucetController {
     tx_hash: string | null
     amount: string | null
     error_msg: string | null
+    manual_url: string | null
     completed_at: Date | null
   }> {
     const row = await this.faucet.findRequest(id)
@@ -47,6 +48,7 @@ class FaucetController {
       tx_hash: row.tx_hash,
       amount: row.amount,
       error_msg: row.error_msg,
+      manual_url: row.manual_url,
       completed_at: row.completed_at
     }
   }

@@ -1,11 +1,14 @@
 import { Module } from "@nestjs/common"
 import { BullModule } from "@nestjs/bullmq"
 import { QueueNames } from "./queue.constants"
-import FaucetProcessor from "./queues/faucet.processor"
 
+/**
+ * Registers shared queue names so any module can `BullModule.registerQueue`
+ * referencing them. Processors live next to the feature that owns them
+ * (e.g. FaucetProcessor inside FaucetModule).
+ */
 @Module({
   imports: [BullModule.registerQueue({ name: QueueNames.Faucet })],
-  providers: [FaucetProcessor],
   exports: [BullModule]
 })
 export class QueueModule {}
