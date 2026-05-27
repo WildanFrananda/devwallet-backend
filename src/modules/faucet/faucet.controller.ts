@@ -7,10 +7,12 @@ import {
   Param,
   ParseUUIDPipe,
   Post,
-  Query
+  Query,
+  UseGuards
 } from "@nestjs/common"
 import FaucetService from "./faucet.service"
 import RequestFaucetDto from "./dto/request-faucet.dto"
+import FaucetRateLimitGuard from "./guards/rate-limit.guard"
 
 @Controller("faucet")
 class FaucetController {
@@ -18,12 +20,15 @@ class FaucetController {
 
   @Post("request")
   @HttpCode(202)
+  @UseGuards(FaucetRateLimitGuard)
   public async request(
     @Body() dto: RequestFaucetDto
   ): Promise<{ jobs: ReadonlyArray<{ chain: string; requestId: string; jobId: string }> }> {
-    // Phase 2 Day 1 stub — accepts request, enqueues, returns job IDs. Rate
-    // limiting + device resolution land Day 5.
-    return this.faucet.enqueueBatch({ addresses: dto.addresses, deviceId: null })
+    return this.faucet.enqueueBatch({
+      addresses: dto.addresses,
+      deviceId: null,
+      deviceFingerprint: dto.deviceFingerprint
+    })
   }
 
   @Get("status/:id")

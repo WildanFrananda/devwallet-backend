@@ -11,11 +11,13 @@ type FaucetJobData = {
   chain: string
   address: string
   deviceId: string | null
+  deviceFingerprint: string
 }
 
 type EnqueueInput = {
   addresses: Record<string, string>
   deviceId: string | null
+  deviceFingerprint: string
 }
 
 type EnqueueOutput = {
@@ -42,7 +44,13 @@ class FaucetService {
         })
         const job = await this.queue.add(
           `faucet:${chain}`,
-          { requestId: request.id, chain, address, deviceId: input.deviceId },
+          {
+            requestId: request.id,
+            chain,
+            address,
+            deviceId: input.deviceId,
+            deviceFingerprint: input.deviceFingerprint
+          },
           { jobId: request.id }
         )
         this.logger.log(`enqueued faucet request id=${request.id} chain=${chain}`)

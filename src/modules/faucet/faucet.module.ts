@@ -8,6 +8,8 @@ import TypeOrmFaucetRequestRepository from "../../infrastructure/database/reposi
 import FaucetController from "./faucet.controller"
 import FaucetService from "./faucet.service"
 import FaucetProcessor from "./faucet.processor"
+import FaucetGateway from "./faucet.gateway"
+import FaucetRateLimitGuard from "./guards/rate-limit.guard"
 import FaucetProviderRegistry from "./providers/provider-registry"
 import SepoliaFaucetProvider from "./providers/sepolia.provider"
 import AmoyFaucetProvider from "./providers/amoy.provider"
@@ -35,6 +37,8 @@ import StarknetFaucetProvider from "./providers/starknet.provider"
   providers: [
     FaucetService,
     FaucetProcessor,
+    FaucetGateway,
+    FaucetRateLimitGuard,
     FaucetProviderRegistry,
     SepoliaFaucetProvider,
     AmoyFaucetProvider,
