@@ -9,6 +9,7 @@ import HealthController from "./modules/health/health.controller"
 import { WebhookModule } from "./modules/webhook/webhook.module"
 import { FaucetModule } from "./modules/faucet/faucet.module"
 import { NotificationModule } from "./modules/notification/notification.module"
+import { DeviceModule } from "./modules/device/device.module"
 
 @Module({
   imports: [
@@ -43,6 +44,7 @@ import { NotificationModule } from "./modules/notification/notification.module"
     RedisModule,
     QueueModule,
     NotificationModule,
+    DeviceModule,
     WebhookModule,
     FaucetModule
   ],
